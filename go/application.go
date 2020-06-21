@@ -28,10 +28,19 @@ func main() {
 		panic(err)
 	}
 
+	//log.Println("Pre-warming caches...")
+	//if _, err := (crawler.Droid5{}).Invoke(*uri, *depth); err != nil {
+	//	panic(err)
+	//}
+
+	log.Println("Crawl benchmarking...")
 	for _, droid := range []crawler.Droid{
 		crawler.Droid1{},
 		crawler.Droid2{},
 		crawler.Droid3{},
+		crawler.Droid4{},
+		crawler.Droid5{},
+		&crawler.Droid6{},
 	} {
 		if err := crawlAndTime(droid, *uri, *depth); err != nil {
 			panic(err)

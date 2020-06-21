@@ -40,18 +40,20 @@ func (d Droid1) Invoke(entryURI string, depth int) ([]string, error) {
 
 	d.Logf("Starting to crawl...")
 	visited := make(map[string]*struct{})
+	var uris []string
 	for len(queue) > 0 {
 		in := queue[0]
 		queue = queue[1:]
 		//d.Logf("==> %d found; %d in queue", len(visited), len(inChan))
 		key := in.URI.Host + in.URI.Path
 		if _, ok := visited[key]; !ok {
-			visited[key] = &struct{}{}
+			uris = append(uris, uri.String())
 			if in.Depth > 0 {
+				visited[key] = &struct{}{}
 				crawl(in)
 			}
 		}
 	}
 
-	return getMapKeys(visited), nil
+	return uris, nil
 }

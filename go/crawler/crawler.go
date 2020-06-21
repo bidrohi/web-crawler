@@ -51,14 +51,6 @@ func crawlAndQueue(stage *entry, addEntry func(uri *url.URL, depth int)) error {
 	return nil
 }
 
-func getMapKeys(m map[string]*struct{}) []string {
-	keys := make([]string, len(m))
-	for k := range m {
-		keys = append(keys, k)
-	}
-	return keys
-}
-
 type Logger struct {
 	IsDebugLogEnabled bool
 }

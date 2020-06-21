@@ -5,17 +5,17 @@ import (
 	"sync"
 )
 
-type Droid3 struct {
+type Droid4 struct {
 	Logger
 }
 
-var _ Droid = (*Droid3)(nil)
+var _ Droid = (*Droid4)(nil)
 
-func (d Droid3) Name() string {
-	return "Droid3"
+func (d Droid4) Name() string {
+	return "Droid4"
 }
 
-func (d Droid3) Invoke(entryURI string, depth int) ([]string, error) {
+func (d Droid4) Invoke(entryURI string, depth int) ([]string, error) {
 	d.Logf("Preparing crawl...")
 	var wg sync.WaitGroup
 	inChan := make(chan *entry, 50)
@@ -24,9 +24,20 @@ func (d Droid3) Invoke(entryURI string, depth int) ([]string, error) {
 		wg.Wait()
 	}
 
+	var visited sync.Map
+	var uris []string
 	addEntry := func(uri *url.URL, depth int) {
-		//d.Logf("Depth %d: Found %s", depth, uri)
+		key := uri.Host + uri.Path
+		if _, ok := visited.Load(key); ok {
+			return
+		}
+		//d.Logf("Remaining depth %d: Found %s", depth, uri)
+		uris = append(uris, uri.String())
+		if depth == 0 {
+			return
+		}
 		wg.Add(1)
+		visited.Store(key, &struct{}{})
 		inChan <- &entry{
 			URI:   uri,
 			Depth: depth,
@@ -53,22 +64,9 @@ func (d Droid3) Invoke(entryURI string, depth int) ([]string, error) {
 	go closeOnComplete()
 
 	d.Logf("Starting to crawl...")
-	visited := make(map[string]*struct{})
-	var uris []string
 	for in := range inChan {
 		//d.Logf("==> %d found; %d in queue", len(visited), len(inChan))
-		key := in.URI.Host + in.URI.Path
-		if _, ok := visited[key]; !ok {
-			uris = append(uris, uri.String())
-			if in.Depth > 0 {
-				visited[key] = &struct{}{}
-				go crawl(in)
-			} else {
-				cleanEntry(in)
-			}
-		} else {
-			cleanEntry(in)
-		}
+		go crawl(in)
 	}
 
 	return uris, nil

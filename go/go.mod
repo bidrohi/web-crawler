@@ -1,9 +1,13 @@
 module tech.bidyut.com
 
-go 1.14
+go 1.19
 
 require (
-	github.com/PuerkitoBio/goquery v1.5.1
-	github.com/akamensky/argparse v1.2.1
-	golang.org/x/net v0.0.0-20200520182314-0ba52f642ac2 // indirect
+	github.com/PuerkitoBio/goquery v1.8.0
+	github.com/akamensky/argparse v1.4.0
+)
+
+require (
+	github.com/andybalholm/cascadia v1.3.1 // indirect
+	golang.org/x/net v0.0.0-20210916014120-12bc252f5db8 // indirect
 )

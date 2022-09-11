@@ -20,3 +20,7 @@
 
 # Fleet
 .fleet/
+
+# Gradle
+build/
+.gradle/

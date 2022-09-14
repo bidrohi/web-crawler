@@ -26,6 +26,7 @@ fun main(args: Array<String>) {
 
     val droids = listOf(
         Droid1(),
+        Droid2(),
     )
     for (d in droids) {
         crawlAndTime(d, uri, depth)
